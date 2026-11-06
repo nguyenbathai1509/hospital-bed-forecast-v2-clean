@@ -1,0 +1,7 @@
+﻿database=HospitalBedForecastV2
+container_backup=/var/opt/mssql/data/HospitalBedForecastV2_BEFORE_DEMO_RESET_20260911_164031.bak
+windows_backup=E:\hospital-bed-forecast-v2-clean\backups\HospitalBedForecastV2_BEFORE_DEMO_RESET_20260911_164031.bak
+sha256=05ef4b09d862f02a0368f6c1f22b509857b1006f9f93fa8ec11db63fa727147e
+restore_verifyonly=PASS
+copy_only=True
+created_before_demo_reset=True

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảo vệ Đồ án: Dự báo giường bệnh</title>
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/night.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+        
+        .reveal {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+        }
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: none;
+            font-weight: 700;
+            color: #e6f1ff;
+        }
+        .reveal h1 { font-size: 2.2em; color: #64ffda; }
+        .reveal h2 { font-size: 1.8em; border-bottom: 2px solid #64ffda; padding-bottom: 10px; display: inline-block; margin-bottom: 30px;}
+        .reveal h3 { font-size: 1.4em; color: #8892b0; }
+        .reveal p, .reveal li {
+            font-size: 0.85em;
+            color: #ccd6f6;
+            line-height: 1.6;
+            text-align: left;
+        }
+        .reveal ul { margin-left: 1.5em; }
+        .reveal li { margin-bottom: 15px; }
+        
+        .highlight { color: #64ffda; font-weight: 600; }
+        .highlight-red { color: #ff6b6b; font-weight: 600; }
+        .highlight-yellow { color: #feca57; font-weight: 600; }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #64ffda;
+            padding: 20px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        
+        .box-title {
+            color: #64ffda;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-align: left;
+        }
+        
+        .math {
+            font-family: "Courier New", Courier, monospace;
+            background: #1e1e1e;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #feca57;
+        }
+        
+        table {
+            width: 100%;
+            font-size: 0.7em !important;
+            border-collapse: collapse;
+            color: #ccd6f6;
+        }
+        th { background-color: rgba(100, 255, 218, 0.1); color: #64ffda; }
+        th, td { border: 1px solid #233554; padding: 10px; text-align: center; }
+        
+        .author-box {
+            margin-top: 50px;
+            font-size: 0.6em;
+            color: #8892b0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Slide 1: Title -->
+            <section>
+                <h3>Đồ án Tốt nghiệp</h3>
+                <h1>Xây Dựng Hệ Thống<br>Dự Báo Nhu Cầu Giường Bệnh<br>Bằng Học Máy</h1>
+                <div class="author-box">
+                    <p><i class="fas fa-user-graduate"></i> Sinh viên: <b>Nguyễn Bá Thái</b> (225748010110001) - Lớp 63K KHMT</p>
+                    <p><i class="fas fa-chalkboard-teacher"></i> Giảng viên HD: <b>TS. Võ Đức Quang</b></p>
+                    <p><i class="fas fa-university"></i> Trường Đại học Vinh - Kỹ thuật và Công nghệ</p>
+                    <p>Tháng 09/2026</p>
+                </div>
+            </section>
+
+            <!-- Slide 2: Đặt vấn đề -->
+            <section>
+                <h2><i class="fas fa-exclamation-triangle"></i> Đặt Vấn Đề</h2>
+                <div class="grid-container">
+                    <div>
+                        <p><span class="highlight">Khó khăn trong thực tiễn:</span></p>
+                        <ul>
+                            <li>Nhu cầu sử dụng giường bệnh <b>biến động liên tục</b> hàng ngày.</li>
+                            <li>Dòng bệnh nhân luân chuyển phức tạp: <i>Nhập viện, Ra viện, Chuyển đến, Chuyển đi.</i></li>
+                            <li>Thiếu công cụ dự báo dẫn đến <b>quá tải cục bộ</b> hoặc <b>lãng phí nguồn lực</b>.</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <div class="box-title">Giải pháp của Đồ án</div>
+                        <p>Xây dựng hệ thống dự báo bằng <b>Machine Learning</b> dựa trên dữ liệu lịch sử.</p>
+                        <p>Dự báo ngắn hạn: <b>H+1</b> (1 ngày) và <b>H+3</b> (3 ngày tới).</p>
+                        <p>Hỗ trợ khoa điều trị chủ động điều phối giường bệnh.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: Dữ liệu & Đảm bảo Chất lượng (DQ) -->
+            <section>
+                <section>
+                    <h2><i class="fas fa-database"></i> 1. Dữ liệu & Đảm bảo Chất lượng</h2>
+                    <p><span class="highlight">Phạm vi Dữ liệu:</span> 2 khoa (K481 - HSTC, K482 - Ngoại), 181 ngày (T1-T6/2026), 362 bản ghi.</p>
+                    <p>Thiết lập <b>12 quy tắc chất lượng dữ liệu (DQ01 - DQ12)</b> trước khi đưa vào mô hình:</p>
+                    <div class="grid-container">
+                        <div class="box">
+                            <div class="box-title highlight-red">Mức ERROR (Chặn quy trình)</div>
+                            <ul>
+                                <li>Thiếu trường dữ liệu bắt buộc.</li>
+                                <li>Ngày tháng không liên tục.</li>
+                                <li>Trùng khóa (Khoa + Ngày).</li>
+                                <li>Số lượng bệnh nhân âm.</li>
+                            </ul>
+                        </div>
+                        <div class="box">
+                            <div class="box-title highlight-yellow">Mức CHECK (Lưu vết, không sửa)</div>
+                            <ul>
+                                <li>Kiểm tra Cân bằng bệnh nhân.</li>
+                                <li>Đối chiếu số bệnh nhân cuối ngày & số giường đang sử dụng.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2><i class="fas fa-balance-scale"></i> Phương trình Cân bằng Bệnh nhân</h2>
+                    <p>Luồng dữ liệu được đối chiếu chặt chẽ bằng nghiệp vụ thực tế:</p>
+                    <p class="math" style="font-size: 0.9em; text-align: center;">
+                        BN_{Cuối ngày} = BN_{Đầu ngày} + BN_{Nhập} + BN_{Chuyển đến} - BN_{Ra} - BN_{Chuyển đi}
+                    </p>
+                    <br>
+                    <p><span class="highlight">Dòng bệnh nhân ròng (Net Flow):</span></p>
+                    <p class="math" style="font-size: 0.9em; text-align: center;">
+                        Net Flow_t = Admissions_t + TransferIn_t - Discharges_t - TransferOut_t
+                    </p>
+                    <p><i>=> Một đại lượng quan trọng được tạo mới để làm đặc trưng cho mô hình ML.</i></p>
+                </section>
+            </section>
+
+            <!-- Slide 4: Xây dựng Đặc trưng (Feature Engineering) -->
+            <section>
+                <h2><i class="fas fa-cogs"></i> 2. Kỹ thuật Trích xuất Đặc trưng (28 Features)</h2>
+                <p>Mỗi bản ghi được làm giàu thông tin với 4 nhóm đặc trưng:</p>
+                <ul>
+                    <li><span class="highlight">Trạng thái hiện tại (8):</span> ID Khoa, Giường KH, Giường đang sử dụng, Luồng BN, Dòng ròng.</li>
+                    <li><span class="highlight">Đặc trưng độ trễ - Lag (12):</span> Giá trị của 1, 2, 3 ngày trước <span class="math">x(t-k)</span>.</li>
+                    <li><span class="highlight">Thống kê trượt - Rolling (5):</span> Cửa sổ 3 ngày [t-2, t-1, t].
+                        <ul>
+                            <li><span class="math">Mean_3 = (x_{t-2} + x_{t-1} + x_t) / 3</span></li>
+                            <li><span class="math">Std_3</span> đo lường mức độ biến động ngắn hạn.</li>
+                        </ul>
+                    </li>
+                    <li><span class="highlight">Đặc trưng Lịch (3):</span> Cờ Cuối tuần, Mã hóa tuần hoàn bằng lượng giác:
+                        <br><span class="math">dow\_sin = \sin(2\pi \cdot dow/7)</span> | <span class="math">dow\_cos = \cos(2\pi \cdot dow/7)</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Slide 5: Chống rò rỉ dữ liệu (Data Leakage) -->
+            <section>
+                <h2><i class="fas fa-shield-alt"></i> 3. Chống Rò rỉ Dữ liệu (Data Leakage)</h2>
+                <p>Bài toán Time-Series tuyệt đối <span class="highlight-red">không dùng Random Split</span>.</p>
+                <div class="box">
+                    <div class="box-title">Nguyên tắc thiết kế chặt chẽ:</div>
+                    <ul>
+                        <li><b>Cách ly theo Khoa:</b> Tính Lag và Rolling riêng cho từng <code>department_id</code>.</li>
+                        <li><b>Mốc thời gian (Origin Date):</b> Mọi biến đầu vào $X$ chỉ lấy tại $t \le origin\_date$. Nhãn mục tiêu $Y$ là $origin\_date + h$.</li>
+                        <li><b>Phân chia thời gian động (Time-based Split):</b> 
+                            <br><code>Train</code> (Quá khứ) $\rightarrow$ <code>Val</code> (28 ngày) $\rightarrow$ <code>Test</code> (37 ngày cuối).
+                            <br>Không có bất kỳ sự chồng lấn hay trộn xáo nào.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 6: Huấn luyện Mô hình -->
+            <section>
+                <h2><i class="fas fa-brain"></i> 4. Cấu hình Mô hình Học máy</h2>
+                <p>Hệ thống đánh giá 4 thuật toán đại diện cho các phương pháp khác nhau:</p>
+                <table>
+                    <tr>
+                        <th>Mô hình</th>
+                        <th>Cấu trúc Đầu vào</th>
+                        <th>Chiến lược cấu hình</th>
+                    </tr>
+                    <tr>
+                        <td><b>Random Forest</b></td>
+                        <td>Bảng (28 features)</td>
+                        <td>Tổ hợp cây quyết định, giảm quá khớp. One-hot khoa.</td>
+                    </tr>
+                    <tr>
+                        <td><b>XGBoost</b></td>
+                        <td>Bảng (28 features)</td>
+                        <td>Tăng cường Gradient, xử lý phi tuyến tốt. (reg:squarederror)</td>
+                    </tr>
+                    <tr>
+                        <td><b>SVR</b></td>
+                        <td>Bảng (28 features)</td>
+                        <td>Kernel RBF. Phải chuẩn hóa `StandardScaler` trước.</td>
+                    </tr>
+                    <tr>
+                        <td><b>LSTM</b></td>
+                        <td>Chuỗi 3x12 (Sequence)</td>
+                        <td>Học phụ thuộc tuần tự. (Units: 16/32, Dropout: 0.2, Early Stopping)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Slide 7: Tiêu chí Đánh giá -->
+            <section>
+                <h2><i class="fas fa-chart-line"></i> 5. Chỉ số Đánh giá & Khuyến nghị</h2>
+                <div class="grid-container">
+                    <div>
+                        <p><span class="highlight">Chỉ số chính:</span></p>
+                        <ul>
+                            <li><b>MAE:</b> Sai số tuyệt đối trung bình (dễ dịch ra "số giường"). Tiêu chí xếp hạng số 1.</li>
+                        </ul>
+                        <p><span class="highlight">Chỉ số kiểm soát bổ sung:</span></p>
+                        <ul>
+                            <li><b>RMSE:</b> Nhấn mạnh các sai số lớn.</li>
+                            <li><b>Bias (Độ chệch):</b> Mô hình có xu hướng đoán thiếu hay dư?</li>
+                            <li><b>Tỷ lệ dự báo thiếu:</b> (Underprediction) - Quan trọng trong y tế.</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <div class="box-title">Chính sách Promote Mô hình</div>
+                        <p>Mô hình mới chỉ thay thế mô hình cũ nếu:</p>
+                        <ul>
+                            <li>Cải thiện MAE $\ge 1\%$.</li>
+                            <li>Tỷ lệ sai lệch $\pm 2$ giường không giảm $> 5\%$.</li>
+                            <li>Không làm suy giảm chất lượng cục bộ của bất kỳ Khoa nào $> 10\%$.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 8: Kết quả Thực nghiệm -->
+            <section>
+                <h2><i class="fas fa-trophy"></i> 6. Kết quả Thực nghiệm (Test Set)</h2>
+                <table>
+                    <tr>
+                        <th>Khoảng DB</th>
+                        <th>Mô hình</th>
+                        <th>MAE $\downarrow$</th>
+                        <th>RMSE $\downarrow$</th>
+                        <th>Tỷ lệ sai $\le 2$ giường $\uparrow$</th>
+                        <th>Quyết định (Promote/Keep)</th>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"><b>H+1</b></td>
+                        <td>RF (Baseline)</td>
+                        <td>2.2549</td>
+                        <td>2.8586</td>
+                        <td><b>59.46%</b></td>
+                        <td rowspan="2" class="highlight-yellow">KEEP (Giữ RF)<br><span style="font-size:0.8em; font-weight:normal;">SVR cải thiện MAE < 1%, nhưng tỷ lệ an toàn giảm 8.1%</span></td>
+                    </tr>
+                    <tr>
+                        <td>SVR (Candidate)</td>
+                        <td><b>2.2482</b></td>
+                        <td>2.8376</td>
+                        <td>51.35%</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"><b>H+3</b></td>
+                        <td>RF</td>
+                        <td>2.4641</td>
+                        <td>3.1649</td>
+                        <td>52.70%</td>
+                        <td rowspan="2" class="highlight">KEEP (Giữ SVR)<br><span style="font-size:0.8em; font-weight:normal;">SVR đang vận hành và vẫn là ứng viên tốt nhất.</span></td>
+                    </tr>
+                    <tr>
+                        <td><b>SVR</b></td>
+                        <td><b>2.2094</b></td>
+                        <td><b>2.9271</b></td>
+                        <td><b>56.76%</b></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Slide 9: Kiến trúc Hệ thống MLOps -->
+            <section>
+                <h2><i class="fas fa-sitemap"></i> 7. Kiến trúc Phần mềm (MLOps)</h2>
+                <div class="box" style="text-align: center; margin-bottom: 20px;">
+                    <b>Frontend (Streamlit)</b> $\Leftrightarrow$ <b>API (FastAPI)</b> $\Leftrightarrow$ <b>Core Services</b> $\Leftrightarrow$ <b>SQL Server & Model Registry</b>
+                </div>
+                <ul>
+                    <li><span class="highlight">Tách biệt Trách nhiệm (Decoupling):</span> Giao diện Streamlit không truy cập Database trực tiếp. Mọi nghiệp vụ thông qua Hợp đồng API.</li>
+                    <li><span class="highlight">Huấn luyện Bất đồng bộ (Async Training):</span> 
+                        <ul>
+                            <li>API trả về JobID ngay lập tức, Background Worker xử lý huấn luyện.</li>
+                            <li>Cơ chế Heartbeat (15s) và Timeout (120s) phục hồi Job bị treo.</li>
+                            <li>Row-level Fencing chống xung đột luồng ghi.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Slide 10: Vòng đời Quản trị Mô hình & Dự báo -->
+            <section>
+                <h2><i class="fas fa-recycle"></i> 8. Vòng đời Dự báo Nghiệp vụ</h2>
+                <p>Bảo vệ tính toàn vẹn của dữ liệu trong y tế:</p>
+                <div class="grid-container">
+                    <div class="box">
+                        <div class="box-title">Vòng đời Mô hình</div>
+                        <ul>
+                            <li><b>Candidate:</b> Vừa train xong.</li>
+                            <li><b>Recommended:</b> Được hệ thống gợi ý.</li>
+                            <li><b>Production:</b> Phải có thao tác xác nhận 2 bước <code>I_CONFIRM_PROMOTION</code> để đưa vào vận hành.</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <div class="box-title">Vòng đời Dự báo</div>
+                        <ul>
+                            <li><i class="fas fa-eye"></i> <b>Preview:</b> Xem thử, không lưu db.</li>
+                            <li><i class="fas fa-file-alt"></i> <b>Draft:</b> Bản nháp chạy từ Model Production.</li>
+                            <li><i class="fas fa-check-circle"></i> <b>Official:</b> Chốt dự báo. Kích hoạt <span class="highlight">Daily Model Lock</span> (khóa cấu hình cho toàn khoa).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 11: Giám sát (Monitoring) & Bất định -->
+            <section>
+                <h2><i class="fas fa-search-chart"></i> 9. Giám sát & Khoảng Tham khảo</h2>
+                <ul>
+                    <li><span class="highlight">Monitoring Engine:</span>
+                        <ul>
+                            <li>Chỉ đối chiếu <b>Dự báo Chính thức (Official)</b> với <b>Thực tế đã làm sạch (Clean Actual)</b>. Bỏ qua Draft/Preview.</li>
+                            <li>Phân biệt rạch ròi trạng thái: <i>Waiting_for_actual</i> (chưa đến ngày) và <i>Missing_actual</i> (lỗi thiếu dữ liệu).</li>
+                        </ul>
+                    </li>
+                    <br>
+                    <li><span class="highlight">Khoảng sai số tham khảo (Uncertainty):</span>
+                        <ul>
+                            <li>Được tính toán dựa trên phân vị $90\%$ (P90) của các sai số lịch sử (Yêu cầu $\ge 30$ mẫu hợp lệ).</li>
+                            <li>Hiển thị tính bất định giúp Bác sĩ có góc nhìn an toàn thay vì chỉ tin vào một giá trị Point Forecast.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Slide 12: Kết luận -->
+            <section>
+                <h2><i class="fas fa-flag-checkered"></i> 10. Kết luận & Hướng phát triển</h2>
+                <div class="grid-container">
+                    <div>
+                        <p><span class="highlight">Thành quả đạt được:</span></p>
+                        <ul>
+                            <li>Xây dựng quy trình xử lý dữ liệu và 28 đặc trưng kháng rò rỉ (leakage).</li>
+                            <li>Đánh giá khách quan 4 thuật toán và thiết lập chính sách Promote khắt khe.</li>
+                            <li>Triển khai thành công hệ thống MLOps hoàn chỉnh (API, Database, Streamlit).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><span class="highlight-yellow">Hạn chế & Hướng phát triển:</span></p>
+                        <ul>
+                            <li>Dữ liệu mẫu còn mỏng (2 khoa, 6 tháng).</li>
+                            <li>Cần tích hợp luồng trực tiếp với HIS (hiện tại dùng Bootstrap Excel).</li>
+                            <li>Nghiên cứu thêm biến ngoại sinh (Ngày lễ, Lịch phẫu thuật, Yếu tố dịch tễ).</li>
+                            <li>Tự động hóa phát hiện Data Drift để cảnh báo Retrain.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 13: Q&A -->
+            <section>
+                <h1 style="font-size: 3.5em; margin-bottom: 20px;">Trân trọng cảm ơn<br>Hội đồng!</h1>
+                <h3 style="color: #64ffda;">Q & A</h3>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/math/math.min.js"></script>
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide',
+            plugins: [ RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>

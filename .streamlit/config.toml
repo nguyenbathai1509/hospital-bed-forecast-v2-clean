@@ -1,0 +1,24 @@
+[client]
+showSidebarNavigation = false
+
+[theme]
+base = "light"
+primaryColor = "#087E78"
+backgroundColor = "#F3F6FA"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#172F40"
+font = "sans serif"
+baseRadius = "medium"
+buttonRadius = "medium"
+showWidgetBorder = true
+showSidebarBorder = false
+borderColor = "#DCE5EC"
+dataframeBorderColor = "#DCE5EC"
+dataframeHeaderBackgroundColor = "#EAF0F5"
+
+[theme.sidebar]
+primaryColor = "#76E0CE"
+backgroundColor = "#102C3D"
+secondaryBackgroundColor = "#1D4053"
+textColor = "#EDF5FB"
+borderColor = "#658392"

@@ -1,0 +1,119 @@
+/* Hospital Bed Forecast: scoped presentation, native semantic colors.
+   No bare p/label rules or generated Emotion class names. Native theme handles
+   portal menus, alerts and canvas tables; keep Streamlit selectors here. */
+:root {
+    --hb-ink: #172f40;
+    --hb-muted: #526577;
+    --hb-accent: #087e78;
+    --hb-accent-hover: #06655f;
+    --hb-line: #dce5ec;
+    --hb-surface: #ffffff;
+    --hb-canvas: #f3f6fa;
+    --hb-focus: #1674b8;
+    --hb-radius: 14px;
+    --hb-shadow: 0 2px 6px #172f4005, 0 8px 24px #172f4005;
+}
+[data-testid="stAppViewContainer"] { background: var(--hb-canvas); font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+[data-testid="stHeader"] { background: #f3f6faf5; border-bottom: 1px solid var(--hb-line); }
+[data-testid="stMainBlockContainer"] { max-width: 1480px; padding: 5.25rem 2.5rem 4rem; }
+[data-testid="stMain"] [data-testid="stVerticalBlock"] { gap: 1.15rem; }
+[data-testid="stMain"] [data-testid="stHorizontalBlock"] { gap: 1rem; }
+
+/* Keep native radio indicators and keyboard behavior visible. */
+[data-testid="stSidebar"] { background: #102c3d; border-right: 1px solid #274557; }
+[data-testid="stSidebar"] [data-testid="stSidebarContent"] { padding: .7rem .6rem 1.2rem; }
+.hb-brand { display: grid; grid-template-columns: 40px 1fr; align-items: center; gap: .9rem .75rem; margin: .1rem 0 1rem; padding: .75rem .2rem 1.35rem; border-bottom: 1px solid #365063; }
+.hb-brand__icon { display: grid; place-items: center; width: 40px; height: 40px; color: #ffffff; background: #087e78; border: 1px solid #47ada4; border-radius: 12px; font-size: 1.4rem; }
+.hb-brand__title { color: #f5fbff; font-size: .95rem; font-weight: 750; line-height: 1.55; letter-spacing: .025em; }
+.hb-brand__subtitle { grid-column: 1 / -1; color: #c3d4df; font-size: .78rem; line-height: 1.7; }
+[data-testid="stSidebar"] .st-key-hb-navigation [role="radiogroup"] { gap: .3rem; }
+[data-testid="stSidebar"] .st-key-hb-navigation,
+[data-testid="stSidebar"] .st-key-hb-navigation [role="radiogroup"] { width: 100%; }
+[data-testid="stSidebar"] .st-key-hb-navigation label { min-height: 46px; margin: 0; padding: .6rem .65rem; border: 1px solid transparent; border-radius: 10px; transition: background-color 150ms ease, border-color 150ms ease; }
+[data-testid="stSidebar"] .st-key-hb-navigation label:hover { background: #1b3b4f; }
+[data-testid="stSidebar"] .st-key-hb-navigation label { width: 100%; box-sizing: border-box; }
+[data-testid="stSidebar"] .st-key-hb-navigation label:has(input:checked) { background: #234e60; border-color: #568fa2; box-shadow: inset 3px 0 #76e0ce; }
+[data-testid="stSidebar"] .st-key-hb-navigation label p { color: #edf5fb; font-size: .88rem; line-height: 1.5; }
+[data-testid="stSidebar"] .st-key-hb-navigation label:has(input:checked) p { color: #ffffff; font-weight: 700; }
+[data-testid="stSidebar"] .st-key-hb-navigation label:has(input:focus-visible) { outline: 2px solid #a6e8f3; outline-offset: 2px; }
+.hb-sidebar-meta { padding: .85rem; border: 1px solid #365063; border-radius: 10px; background: #173647; }
+.hb-sidebar-meta__label { color: #c3d4df; font-size: .72rem; margin-bottom: .4rem; }
+.hb-sidebar-meta__value { color: #f0f7fc; font-family: Consolas, monospace; font-size: .75rem; overflow-wrap: anywhere; }
+.hb-sidebar-note { color: #edf5fb; font-size: .8rem; line-height: 1.7; padding: .1rem .2rem; }
+
+/* One restrained masthead, compact section headings. */
+.hb-page-header { padding: 1.5rem 1.75rem; margin-bottom: .8rem; border: 1px solid var(--hb-line); border-left: 4px solid var(--hb-accent); border-radius: var(--hb-radius); background: linear-gradient(110deg, #ffffff 65%, #edf7f7); box-shadow: var(--hb-shadow); }
+.hb-page-header h1 { color: var(--hb-ink); padding: 0; margin: 0; font-size: clamp(1.6rem, 2.4vw, 2.15rem); font-weight: 740; letter-spacing: -.035em; line-height: 1.35; }
+.hb-page-header p { color: var(--hb-muted); max-width: 65rem; font-size: .94rem; line-height: 1.7; margin: .65rem 0 0; }
+[data-testid="stMain"] [data-testid="stHeadingWithActionElements"] :is(h2,h3) { color: var(--hb-ink); font-size: 1.12rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.5; padding-top: .6rem; padding-bottom: .25rem; }
+[data-testid="stMain"] [data-testid="stCaptionContainer"] { color: var(--hb-muted); opacity: 1; font-size: .82rem; line-height: 1.65; }
+[data-testid="stMain"] [data-testid="stCaptionContainer"] p { color: var(--hb-muted); opacity: 1; font-weight: 450; }
+[data-testid="stMain"] [data-testid="stWidgetLabel"] { color: var(--hb-ink); font-weight: 600; }
+[data-testid="stMain"] [data-testid="stWidgetLabel"] p { font-size: .85rem; line-height: 1.5; }
+[data-testid="stMain"] [data-testid="stMarkdownContainer"] :is(p,li) { line-height: 1.65; }
+[data-testid="stMain"] [data-testid="stMarkdownContainer"] a { text-underline-offset: 3px; }
+
+/* Long metric labels and values must remain readable. */
+[data-testid="stMain"] [data-testid="stMetric"] { height: 100%; min-height: 116px; padding: 1.1rem 1.15rem; border: 1px solid var(--hb-line); border-top: 3px solid #8ebbbd; border-radius: var(--hb-radius); background: var(--hb-surface); box-shadow: var(--hb-shadow); }
+[data-testid="stMain"] [data-testid="stMetricLabel"] { min-height: 1.6rem; height: auto; }
+[data-testid="stMain"] [data-testid="stMetricLabel"] p { color: var(--hb-muted); font-size: .79rem; font-weight: 600; white-space: normal; line-height: 1.5; }
+[data-testid="stMain"] [data-testid="stMetricValue"] { color: var(--hb-ink); font-size: clamp(1.15rem, 1.7vw, 1.65rem); font-weight: 720; font-variant-numeric: tabular-nums; letter-spacing: -.025em; }
+[data-testid="stMain"] [data-testid="stMetricValue"] > div { white-space: normal; overflow-wrap: anywhere; }
+
+/* Owned container keys avoid relying on generated classes or inline styles. */
+[data-testid="stMain"] [class*="st-key-hb-panel-"] { background: var(--hb-surface); border-color: var(--hb-line); box-shadow: var(--hb-shadow); border-radius: var(--hb-radius); padding: 1.1rem; }
+[data-testid="stMain"] :is([class*="st-key-hb-panel-official-"], [class*="st-key-hb-panel-draft-"], [class*="st-key-hb-panel-preview-"]) [data-testid="stMetric"] { box-shadow: none; }
+[data-testid="stMain"] :is([class*="st-key-hb-panel-official-"], [class*="st-key-hb-panel-draft-"], [class*="st-key-hb-panel-preview-"]) [data-testid="stColumn"]:nth-child(3) [data-testid="stMetric"] { background: #edf8f5; border-color: #b7d9d2; border-top-color: #087e78; }
+[data-testid="stMain"] [data-testid="stExpander"] details { border: 1px solid var(--hb-line); border-radius: 12px; background: var(--hb-surface); overflow: hidden; }
+[data-testid="stMain"] [data-testid="stExpander"] summary { min-height: 48px; padding: .75rem 1rem; }
+[data-testid="stMain"] [data-testid="stExpander"] summary:hover { background: #f2f7fa; }
+[data-testid="stMain"] [data-testid="stExpander"] summary p { font-weight: 600; }
+[data-testid="stMain"] [data-testid="stExpander"] details[open] > summary { border-bottom: 1px solid var(--hb-line); }
+
+/* One inherited text color for all descendants/states. Never dim whole buttons. */
+:is([data-testid="stMain"], [data-testid="stSidebar"]) :is([data-testid="stButton"], [data-testid="stFormSubmitButton"], [data-testid="stDownloadButton"]) button { min-height: 44px; padding: .6rem 1rem; border-radius: 9px; border: 1px solid #9aabb9; background: #ffffff; color: #23465c; font-weight: 650; transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease; }
+:is([data-testid="stMain"], [data-testid="stSidebar"]) :is([data-testid="stButton"], [data-testid="stFormSubmitButton"], [data-testid="stDownloadButton"]) button :is(p,span) { color: inherit !important; font-weight: inherit; font-size: .85rem; line-height: 1.5; white-space: normal; }
+:is([data-testid="stMain"], [data-testid="stSidebar"]) :is([data-testid="stButton"], [data-testid="stFormSubmitButton"], [data-testid="stDownloadButton"]) button:hover:not(:disabled) { background: #edf6f5; border-color: #087e78; color: #075d58; }
+:is([data-testid="stMain"], [data-testid="stSidebar"]) :is([data-testid="stButton"], [data-testid="stFormSubmitButton"], [data-testid="stDownloadButton"]) button:is([kind="primary"],[kind="primaryFormSubmit"]) { background: var(--hb-accent); border-color: var(--hb-accent); color: #ffffff; box-shadow: 0 3px 8px #087e781a; }
+:is([data-testid="stMain"], [data-testid="stSidebar"]) :is([data-testid="stButton"], [data-testid="stFormSubmitButton"], [data-testid="stDownloadButton"]) button:is([kind="primary"],[kind="primaryFormSubmit"]):hover:not(:disabled) { background: var(--hb-accent-hover); border-color: var(--hb-accent-hover); color: #ffffff; }
+:is([data-testid="stMain"], [data-testid="stSidebar"]) :is([data-testid="stButton"], [data-testid="stFormSubmitButton"], [data-testid="stDownloadButton"]) button:disabled { background: #e7edf2; border-color: #c0ced9; color: #526577; opacity: 1; box-shadow: none; cursor: not-allowed; }
+[data-testid="stSidebar"] [data-testid="stButton"] button:not([kind="primary"]) { color: #edf5fb; background: #1d4053; border-color: #658392; }
+[data-testid="stSidebar"] [data-testid="stButton"] button:hover:not(:disabled) { color: #ffffff; background: #2b5266; border-color: #a6e8f3; }
+
+/* Keyboard focus and reduced motion are part of the visual contract. */
+:is([data-testid="stMain"], [data-testid="stSidebar"]) :is(button,summary,a,input,textarea,[role="tab"]):focus-visible { outline: 3px solid var(--hb-focus); outline-offset: 3px; }
+[data-testid="stSidebar"] :is(button,summary,a,input):focus-visible { outline-color: #a6e8f3; }
+[data-testid="stMain"] :is([data-baseweb="input"], [data-baseweb="select"]):focus-within { box-shadow: 0 0 0 3px #1674b82b; border-radius: 9px; }
+
+/* Do not override semantic alert text or canvas table colors here. */
+[data-testid="stMain"] [role="tablist"] { gap: .4rem; border-bottom: 1px solid var(--hb-line); }
+[data-testid="stMain"] [role="tab"] { min-height: 44px; padding: .5rem 1rem; border-radius: 8px 8px 0 0; }
+[data-testid="stMain"] [role="tab"][aria-selected="true"] { background: #e5f3f1; color: #075d58; font-weight: 650; }
+[data-testid="stMain"] [data-testid="stDataFrame"] { border: 1px solid var(--hb-line); border-radius: 12px; overflow: hidden; background: #ffffff; }
+[data-testid="stMain"] :is([data-testid="stVegaLiteChart"], [data-testid="stArrowVegaLiteChart"]) { border: 1px solid var(--hb-line); border-radius: 12px; padding: .5rem; background: #ffffff; }
+[data-testid="stMain"] [data-testid="stAlert"] { border-radius: 10px; }
+[data-testid="stMain"] hr { border-color: var(--hb-line); margin: 1rem 0; }
+[data-testid="stSidebar"] hr { border-color: #365063; }
+
+@media (max-width: 1100px) {
+    [data-testid="stMainBlockContainer"] { padding: 4.9rem 1.4rem 3rem; }
+    [data-testid="stMain"] [data-testid="stMetric"] { padding: .85rem; }
+}
+@media (max-width: 700px) {
+    [data-testid="stMainBlockContainer"] { padding: 4.6rem .85rem 2.5rem; }
+    .hb-page-header { padding: 1.1rem; margin-bottom: .25rem; }
+    .hb-page-header h1 { font-size: 1.5rem; }
+    .hb-page-header p { font-size: .87rem; }
+    [data-testid="stMain"] [data-testid="stHorizontalBlock"] { flex-wrap: wrap; gap: .75rem; }
+    [data-testid="stMain"] [data-testid="stColumn"] { min-width: min(100%, 15rem); flex: 1 1 15rem; }
+    [data-testid="stMain"] [data-testid="stMetric"] { min-height: 100px; }
+    [data-testid="stMain"] [role="tablist"] { overflow-x: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+    :is([data-testid="stMain"], [data-testid="stSidebar"]) *,
+    :is([data-testid="stMain"], [data-testid="stSidebar"]) *::before,
+    :is([data-testid="stMain"], [data-testid="stSidebar"]) *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+@media (forced-colors: active) {
+    [data-testid="stSidebar"] .st-key-hb-navigation label:has(input:checked) { outline: 2px solid Highlight; }
+}

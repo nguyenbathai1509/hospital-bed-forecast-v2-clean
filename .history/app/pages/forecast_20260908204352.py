@@ -1,0 +1,170 @@
+from __future__ import annotations
+
+from datetime import date
+
+import streamlit as st
+
+from app.api_client import ApiClientError, HospitalApiClient
+from app.components import dataframe, page_header, render_prediction_cards, show_api_error
+from app.viewmodels import department_label
+
+
+CONFIRM_OFFICIAL = "I_CONFIRM_OFFICIAL"
+
+
+def render(client: HospitalApiClient) -> None:
+    page_header(
+        "🔮 Dự báo",
+        "Official và Preview được tách rõ. Preview không persist; Production Predict chỉ tạo Draft; Official cần xác nhận riêng.",
+    )
+
+    try:
+        data_status = client.data_status()
+        departments = client.departments()
+        models = client.models(limit=200).get("rows", [])
+    except ApiClientError as exc:
+        show_api_error(exc)
+        return
+
+    if not departments:
+        st.info("Chưa có khoa hoạt động.")
+        return
+
+    labels = {department_label(row): row for row in departments}
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        selected_label = st.selectbox("Khoa", options=list(labels), key="forecast_department")
+    with c2:
+        horizon = st.selectbox("Horizon", [1, 3], format_func=lambda x: f"H+{x}")
+    with c3:
+        latest = data_status.get("business_date")
+        origin_default = date.fromisoformat(latest) if latest else date.today()
+        origin_date = st.date_input("Ngày dữ liệu / origin_date", value=origin_default)
+
+    department = labels[selected_label]
+    department_id = int(department["department_id"])
+    origin_text = origin_date.isoformat()
+
+    st.subheader("DỰ BÁO CHÍNH THỨC")
+    try:
+        production = client.production_models()
+        prod_state = next(
+            (row for row in production.get("horizons", []) if int(row["horizon"]) == horizon),
+            {},
+        )
+        active = prod_state.get("active") or {}
+        official = client.official_forecasts(
+            origin_date=origin_text,
+            department_id=department_id,
+            horizon=horizon,
+            limit=20,
+        )
+    except ApiClientError as exc:
+        show_api_error(exc)
+        return
+
+    st.write(
+        f"Production H+{horizon}: **{active.get('model_family', '-')}** | "
+        f"Candidate: `{active.get('candidate_id', '-')}`"
+    )
+
+    official_rows = official.get("rows", [])
+    if official_rows:
+        st.success("🔒 Official Forecast đã tồn tại và là bằng chứng audit bất biến.")
+        render_prediction_cards(official_rows)
+    else:
+        st.info("Chưa có Official cho khoa/horizon/ngày này.")
+
+        if st.button("DỰ BÁO BẰNG PRODUCTION → TẠO DRAFT", type="primary"):
+            try:
+                result = client.production_predict(
+                    origin_date=origin_text,
+                    department_ids=[department_id],
+                    horizons=[horizon],
+                    created_by="streamlit",
+                )
+                st.session_state["forecast_draft_result"] = result
+                if result.get("status") == "NO_DRAFTS_NEEDED":
+                    st.info("Không cần Draft mới; key này có thể đã có Official.")
+                else:
+                    st.success("Draft đã sẵn sàng. Draft chưa phải Official.")
+            except ApiClientError as exc:
+                show_api_error(exc)
+
+        result = st.session_state.get("forecast_draft_result")
+        if isinstance(result, dict) and result.get("origin_date") == origin_text:
+            draft_rows = result.get("created", []) + result.get("reused", [])
+            render_prediction_cards(draft_rows)
+
+        with st.expander("Xác nhận Official", expanded=False):
+            try:
+                plan = client.confirm_official(
+                    origin_date=origin_text,
+                    confirmed_by="streamlit",
+                    confirmation=None,
+                )
+            except ApiClientError as exc:
+                show_api_error(exc)
+                plan = None
+
+            if plan:
+                st.write(f"Status: **{plan.get('status')}** | Draft mở: {plan.get('draft_count', 0)}")
+                dataframe(plan.get("drafts", []), height=220)
+
+            typed = st.text_input(
+                f"Gõ chính xác `{CONFIRM_OFFICIAL}` để phát hành tất cả Draft mở của origin_date này",
+                type="password",
+                key="official_confirmation",
+            )
+            if st.button(
+                "XÁC NHẬN DỰ BÁO CHÍNH THỨC",
+                disabled=typed != CONFIRM_OFFICIAL,
+            ):
+                try:
+                    confirmed = client.confirm_official(
+                        origin_date=origin_text,
+                        confirmed_by="streamlit",
+                        confirmation=typed,
+                    )
+                    st.success(f"Official confirmation: {confirmed.get('status')}")
+                    st.json(confirmed)
+                except ApiClientError as exc:
+                    show_api_error(exc)
+
+    st.subheader("MODEL PREVIEW")
+    st.caption("Preview không ảnh hưởng Production, không tạo Draft/Official và không được tính vào Production Monitoring.")
+
+    mode = st.selectbox("Preview mode", ["RECOMMENDED", "PRODUCTION", "CUSTOM"])
+    custom_candidates: dict[str, str] = {}
+    if mode == "CUSTOM":
+        compatible = [row for row in models if int(row.get("horizon", 0)) == horizon]
+        options = {
+            f"{row['model_family']} | {row['candidate_id']} | MAE={row.get('mae')}": row["candidate_id"]
+            for row in compatible
+        }
+        if not options:
+            st.warning("Không có candidate compatible cho horizon này.")
+        else:
+            chosen = st.selectbox("Custom candidate", list(options))
+            custom_candidates[str(horizon)] = options[chosen]
+
+    if st.button("PREVIEW"):
+        try:
+            preview = client.forecast_preview(
+                mode=mode,
+                origin_date=origin_text,
+                department_ids=[department_id],
+                horizons=[horizon],
+                custom_candidates=custom_candidates,
+            )
+            st.session_state["forecast_preview_result"] = preview
+        except ApiClientError as exc:
+            show_api_error(exc)
+
+    preview = st.session_state.get("forecast_preview_result")
+    if isinstance(preview, dict):
+        st.info(
+            f"PREVIEW | persisted={preview.get('persisted')} | official={preview.get('official')} | "
+            f"monitoring_eligible={preview.get('monitoring_eligible')}"
+        )
+        render_prediction_cards(preview.get("predictions", []))
